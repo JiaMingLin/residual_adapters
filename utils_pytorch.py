@@ -71,13 +71,13 @@ def train(epoch, tloaders, tasks, net, args, optimizer,list_criterion=None):
         # measure data loading time
         data_time.update(time.time() - end)
         if args.use_cuda:
-            inputs, targets = inputs.cuda(async=True), targets.cuda(async=True)
+            inputs, targets = inputs.cuda(non_blocking=True), targets.cuda(non_blocking=True)
         optimizer.zero_grad()
         inputs, targets = Variable(inputs), Variable(targets)
         outputs = net(inputs)
         loss = args.criterion(outputs, targets)
         # measure accuracy and record loss
-        (losses[current_task_index]).update(loss.data[0], targets.size(0))
+        (losses[current_task_index]).update(loss.item(), targets.size(0))
         _, predicted = torch.max(outputs.data, 1)
         correct = predicted.eq(targets.data).cpu().sum()
         (top1[current_task_index]).update(correct*100./targets.size(0), targets.size(0))     
@@ -120,7 +120,7 @@ def test(epoch, loaders, all_tasks, net, best_acc, args, optimizer):
                 outputs = outputs[0]
             loss = args.criterion(outputs, targets)
             
-            losses[itera].update(loss.data[0], targets.size(0))
+            losses[itera].update(loss.item(), targets.size(0))
             _, predicted = torch.max(outputs.data, 1)
             correct = predicted.eq(targets.data).cpu().sum()
             top1[itera].update(correct*100./targets.size(0), targets.size(0))

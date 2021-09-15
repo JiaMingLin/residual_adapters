@@ -74,7 +74,8 @@ def prepare_data_loaders(dataset_names, data_dir, imdb_dir, shuffle_train=True, 
     imdb_names = [imdb_names_train, imdb_names_val]
 
     with open(data_dir + 'decathlon_mean_std.pickle', 'rb') as handle:
-        dict_mean_std = pickle.load(handle)
+        dict_mean_std = pickle.load(handle, encoding='bytes')
+        dict_mean_std = {key.decode('utf-8'):value for (key,value) in dict_mean_std.items()}
     
     for i in range(len(dataset_names)):
         imgnames_train = []

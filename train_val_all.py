@@ -38,7 +38,7 @@ parser.add_argument('--wd1x1', default=1., type=float, nargs='+', help='weight d
 parser.add_argument('--nb_epochs', default=120, type=int, help='nb epochs')
 parser.add_argument('--step1', default=80, type=int, help='nb epochs before first lr decrease')
 parser.add_argument('--step2', default=100, type=int, help='nb epochs before second lr decrease')
-parser.add_argument('--mode', default='parallel_adapters', type=str, help='Task adaptation mode')
+parser.add_argument('--mode', default='serial_adapters', type=str, help='Task adaptation mode')
 parser.add_argument('--proj', default='11', type=str, help='Position of the adaptation module')
 parser.add_argument('--dropout', default='00', type=str, help='Position of dropouts')
 parser.add_argument('--expdir', default='/data/mdl/exp/adapter/', help='Save folder')

@@ -41,14 +41,13 @@ def train_val(args):
     args.criterion = nn.CrossEntropyLoss()
     optimizer = sgd.SGD(filter(lambda p: p.requires_grad, net.parameters()), lr=args.lr, momentum=0.9, weight_decay=args.wd)
 
-
+    ckp_path = args.ckpdir+'/ckpt'+config_task.mode+args.archi+args.proj+''.join(args.dataset)+'.t7'
     print("Start training")
     for epoch in range(start_epoch, start_epoch+args.nb_epochs):
         training_tasks = utils_pytorch.adjust_learning_rate_and_learning_taks(optimizer, epoch, args)
         st_time = time.time()
     
         # Training and validation
-        ckp_path = args.ckpdir+'/ckpt'+config_task.mode+args.archi+args.proj+''.join(args.dataset)+'.t7'
         train_acc, train_loss = utils_pytorch.train(epoch, train_loaders, training_tasks, net, args, optimizer)
         test_acc, test_loss, best_acc = utils_pytorch.test(epoch,val_loaders, all_tasks, net, best_acc, args, optimizer)
         
@@ -60,3 +59,5 @@ def train_val(args):
             results[2:4,epoch,i] = [test_loss[i],test_acc[i]]
         np.save(args.svdir+'/results_'+'adapt'+str(args.seed)+args.dropout+args.mode+args.proj+''.join(args.dataset)+'wd3x3_'+str(args.wd3x3)+'_wd1x1_'+str(args.wd1x1)+str(args.wd)+str(args.nb_epochs)+str(args.step1)+str(args.step2),results)
         print('Epoch lasted {0}'.format(time.time()-st_time))
+
+    return ckp_path

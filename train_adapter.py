@@ -26,7 +26,7 @@ def init_target_model(args):
     net_old = checkpoint['net']
 
     # init model, mode is cached at `config_task.mode`
-    net = models.resnet26(num_classes)
+    net = models.resnet26(args.num_classes)
     store_data = []
     for name, m in net_old.named_modules():
         if isinstance(m, nn.Conv2d) and (m.kernel_size[0]==3):
@@ -59,7 +59,7 @@ def init_target_model(args):
     if len(names) != 51 and args.mode == 'series_adapters':
         condition_bn ='bns.....conv'
 
-    for id_task in range(len(num_classes)):
+    for id_task in range(len(args.num_classes)):
         element = 0
         for name, m in net.named_modules():
             if isinstance(m, nn.BatchNorm2d) and 'bns.'+str(id_task) in name and not re.search(condition_bn,name):

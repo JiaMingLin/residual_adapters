@@ -47,7 +47,8 @@ parser.add_argument('--imdbdir', default='/data/mdl/decathlon/annotations/', hel
 parser.add_argument('--source', default='', type=str, help='Network source')
 parser.add_argument('--seed', default=0, type=int, help='seed')
 parser.add_argument('--factor', default='1.', type=float, help='Width factor of the network')
-parser.add_argument('--use_pretrain', dest='use_pretrain', action='store_false', help='Using pretrain model(check --source specification)')
+parser.add_argument('--use_pretrain', dest='use_pretrain', action='store_true', help='Using pretrain model(check --source specification)')
+parser.set_defaults(use_pretrain=False)
 args = parser.parse_args()
 args.archi ='default'
 config_task.mode = args.mode
@@ -81,7 +82,7 @@ config_task.isdropout1 = (args.dropout[0] == '1')
 config_task.isdropout2 = (args.dropout[1] == '1')
 
 # train from scratch
-if bool(args.use_pretrain) == False:
+if args.use_pretrain == False:
     args.dataset = [pretrain_ds]
     source_path = ts.train_val(args)
     args.source = source_path

@@ -16,6 +16,7 @@ from torch.autograd import Variable
 import imdbfolder_coco as imdbfolder
 import config_task
 import utils_pytorch
+import sgd
 
 def train_val(args):
     # Prepare data loaders

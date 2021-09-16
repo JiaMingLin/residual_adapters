@@ -85,7 +85,7 @@ config_task.isdropout2 = (args.dropout[1] == '1')
 # train from scratch
 if bool(args.use_pretrain) == False:
     args.dataset = pretrain_ds
-	source_path = ts.train_val(args)
+    source_path = ts.train_val(args)
     args.source = source_path
 else:
     if len(args.source) == 0:

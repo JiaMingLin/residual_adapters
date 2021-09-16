@@ -47,7 +47,7 @@ parser.add_argument('--imdbdir', default='/data/mdl/decathlon/annotations/', hel
 parser.add_argument('--source', default='', type=str, help='Network source')
 parser.add_argument('--seed', default=0, type=int, help='seed')
 parser.add_argument('--factor', default='1.', type=float, help='Width factor of the network')
-parser.add_argument('--use_pretrain', default=1, type=bool, help='Using pretrain model(check --source specification)')
+parser.add_argument('--use_pretrain', dest='use_pretrain', action='store_false', help='Using pretrain model(check --source specification)')
 args = parser.parse_args()
 args.archi ='default'
 config_task.mode = args.mode

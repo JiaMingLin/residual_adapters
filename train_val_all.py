@@ -54,8 +54,6 @@ config_task.mode = args.mode
 config_task.proj = args.proj
 config_task.factor = args.factor
 args.use_cuda = torch.cuda.is_available()
-if type(args.dataset) is str:
-    args.dataset = [args.dataset]
 
 if type(args.wd3x3) is float:
     args.wd3x3 = [args.wd3x3]
@@ -84,7 +82,7 @@ config_task.isdropout2 = (args.dropout[1] == '1')
 
 # train from scratch
 if bool(args.use_pretrain) == False:
-    args.dataset = pretrain_ds
+    args.dataset = [pretrain_ds]
     source_path = ts.train_val(args)
     args.source = source_path
 else:
@@ -93,6 +91,6 @@ else:
         exit(1)
 
 for target in target_ds:
-    args.dataset = target
+    args.dataset = [target]
     ta.train_val(args)
 

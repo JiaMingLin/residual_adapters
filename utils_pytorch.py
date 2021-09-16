@@ -103,7 +103,7 @@ def train(epoch, tloaders, tasks, net, args, optimizer,list_criterion=None):
 
 
 
-def test(epoch, loaders, all_tasks, net, best_acc, args, optimizer):
+def test(epoch, loaders, all_tasks, net, best_acc, args, optimizer, ckp_path=None):
     net.eval()
     losses = [AverageMeter() for i in all_tasks]
     top1 = [AverageMeter() for i in all_tasks]
@@ -126,7 +126,7 @@ def test(epoch, loaders, all_tasks, net, best_acc, args, optimizer):
             top1[itera].update(correct*100./targets.size(0), targets.size(0))
         
         print('Task {0} : Test Loss {loss.val:.4f} ({loss.avg:.4f})\t'
-              'Test Acc {top1.val:.3f} ({top1.avg:.3f})'.format(i, loss=losses[itera], top1=top1[itera]))
+              'Test Acc val:{top1.val:.3f} (avg:{top1.avg:.3f})'.format(i, loss=losses[itera], top1=top1[itera]))
     
     # Save checkpoint.
     acc = np.sum([top1[i].avg for i in range(len(all_tasks))])
@@ -137,7 +137,9 @@ def test(epoch, loaders, all_tasks, net, best_acc, args, optimizer):
             'acc': acc,
             'epoch': epoch,
         }
-        torch.save(state, args.ckpdir+'/ckpt'+config_task.mode+args.archi+args.proj+''.join(args.dataset)+'.t7')
+        if ckp_path is None:
+            ckp_path = args.ckpdir+'/ckpt'+config_task.mode+args.archi+args.proj+''.join(args.dataset)+'.t7'
+        torch.save(state, ckp_path)
         best_acc = acc
     
     return [top1[i].avg for i in range(len(all_tasks))], [losses[i].avg for i in range(len(all_tasks))], best_acc

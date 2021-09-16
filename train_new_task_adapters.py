@@ -51,6 +51,7 @@ config_task.proj = args.proj
 config_task.factor = args.factor
 args.use_cuda = torch.cuda.is_available()
 if type(args.dataset) is str:
+    # args.dataset to be array type for joint training.
     args.dataset = [args.dataset]
 
 if type(args.wd3x3) is float:
@@ -88,6 +89,8 @@ args.num_classes = num_classes
 print('==> Resuming from checkpoint..')
 checkpoint = torch.load(args.source)
 net_old = checkpoint['net']
+
+# init model, mode is cached at `config_task.mode`
 net = models.resnet26(num_classes)
 store_data = []
 for name, m in net_old.named_modules():
@@ -115,6 +118,7 @@ for name, m in net_old.named_modules():
         store_data_rv.append(m.running_var)
 
 # Special case to copy the weight for the BN layers when the target and source networks have not the same number of BNs
+# To check, if BN in new model is random or copy from previous?
 import re
 condition_bn = 'noproblem'
 if len(names) != 51 and args.mode == 'series_adapters':
@@ -138,6 +142,8 @@ del net_old
 start_epoch = 0
 best_acc = 0  # best test accuracy
 results = np.zeros((4,start_epoch+args.nb_epochs,len(args.num_classes)))
+
+# args.dataset is now array type, for joint training
 all_tasks = range(len(args.dataset))
 np.random.seed(1993)
 

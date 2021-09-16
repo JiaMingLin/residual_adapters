@@ -12,4 +12,4 @@
     ```
 
 4. 10 different domains
-
+![domain_samples](https://github.com/JiaMingLin/residual_adapters/blob/master/files/domain_samples.png?raw=true)
